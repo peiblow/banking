@@ -5,6 +5,7 @@ import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
 import com.example.bank.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,6 +15,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public void validateTransaction (User sender, BigDecimal amount) throws Exception {
         if (sender.getUserType() == UserType.MERCHANT) {
@@ -35,6 +39,7 @@ public class UserService {
 
     public User createUser (UserDTO user) {
         User newUser = new User(user);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         this.saveUser(newUser);
 
         return newUser;
