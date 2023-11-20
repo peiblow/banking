@@ -1,10 +1,8 @@
 package com.example.bank.domain.user;
 
+import com.example.bank.dtos.UserDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -12,6 +10,7 @@ import java.math.BigDecimal;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User {
@@ -31,4 +30,14 @@ public class User {
     private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    public User(UserDTO userData) {
+        this.firstName = userData.firstName();
+        this.lastName = userData.lastName();
+        this.document = userData.document();
+        this.email = userData.email();
+        this.password = userData.password();
+        this.balance = userData.balance();
+        this.userType = userData.type();
+    }
 }
