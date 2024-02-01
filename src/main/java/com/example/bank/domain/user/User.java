@@ -17,8 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
 
     @Column(unique = true)
     private String document;
@@ -32,8 +32,8 @@ public class User {
     private UserType userType;
 
     public User(UserDTO userData) {
-        this.firstName = userData.firstName();
-        this.lastName = userData.lastName();
+        this.firstname = userData.firstname();
+        this.lastname = userData.lastname();
         this.document = userData.document();
         this.email = userData.email();
         this.password = userData.password();
