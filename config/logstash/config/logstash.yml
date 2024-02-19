@@ -1,0 +1,4 @@
+http.host: "127.0.0.1"
+http.port: 9600
+path.config: /var/lib/docker/volumes/logstash/pipeline
+xpack.monitoring.elasticsearch.hosts: ["localhost:9200"]

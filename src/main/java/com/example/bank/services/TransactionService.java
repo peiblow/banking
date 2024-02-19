@@ -4,6 +4,7 @@ import com.example.bank.domain.transaction.Transaction;
 import com.example.bank.domain.user.User;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.repositories.TransactionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class TransactionService {
     @Autowired
     private UserService userService;
@@ -49,6 +51,7 @@ public class TransactionService {
 
         boolean isAuthorized = authorizedTransaction(sent, transactionDTO.value());
         if (!isAuthorized) {
+            log.error("Transação não autorizada");
             throw new Exception("Transação não autorizada");
         }
 
