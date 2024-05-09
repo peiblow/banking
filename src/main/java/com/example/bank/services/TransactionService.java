@@ -7,6 +7,7 @@ import com.example.bank.repositories.TransactionRepository;
 import com.example.bank.utils.report.GenerateReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,14 +35,17 @@ public class TransactionService {
     @Autowired
     private NotificationService notificationService;
 
+    @Cacheable("userTransaction")
     public  List<Transaction> getUserTransactions(Long id) throws Exception {
         return this.repository.findTransactionByreceiver_id(id).orElseThrow(() -> new Exception("Nenhuma transação encontrada"));
     }
 
+    @Cacheable("userTransaction")
     public List<Transaction> getUserReceivedTransactions(Long id) throws Exception {
         return this.repository.findTransactionByreceiver_id(id).orElseThrow(() -> new Exception("Este usuário não recebeu nenhuma transação"));
     }
 
+    @Cacheable("userTransaction")
     public List<Transaction> getUserSentTransactions(Long id) throws Exception {
         return this.repository.findTransactionBysent_id(id).orElseThrow(() -> new Exception("Este usuário não efetuou nenhuma transação"));
     }
