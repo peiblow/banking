@@ -5,6 +5,7 @@ import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
 import com.example.bank.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,7 @@ public class UserService {
         return newUser;
     }
 
+    @Cacheable("userList")
     public List<User> getAllUsers() {
         return this.repository.findAll();
     }

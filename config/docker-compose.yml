@@ -1,6 +1,42 @@
 version: "3.3"
 
 services:
+  db:
+    container_name: psql-db
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: bank
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: psql
+
+  adminer:
+    container_name: psql-admin
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8081"
+
+  redis:
+    container_name: redis-cache
+    image: redis/redis-stack:latest
+    restart: always
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    volumes:
+      - ./data:/root/redis
+      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=rdscache
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elastic_springboot
