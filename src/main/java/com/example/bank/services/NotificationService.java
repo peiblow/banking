@@ -5,6 +5,7 @@ import com.example.bank.dtos.NotificationDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

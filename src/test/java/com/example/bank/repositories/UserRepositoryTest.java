@@ -5,29 +5,33 @@ import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private  static final String document = "12345678900";
+    private  static final String DOCUMENT = "12345678900";
 
     @BeforeEach
     public void setup() {
         BigDecimal balance = new BigDecimal(2000);
         UserDTO userData = new UserDTO(
                 "Pablo",
-                "Fernandes",
-                document,
-                "pablo@gmail.com",
+                "Fernandez",
+                DOCUMENT,
+                "pablo22@gmail.com",
                 balance,
                 "123456789",
                 UserType.COMMON
@@ -39,10 +43,12 @@ class UserRepositoryTest {
 
     @Test
     void itShouldFindUserByDocument() {
-        Optional<User> user = userRepository.findUserByDocument(document);
+        Optional<User> user = userRepository.findUserByDocument(DOCUMENT);
 
-        assertThat(user).isNotEmpty();
-        assertThat(user.get().getDocument()).isEqualTo(document);
+        String userDocument =  user.get().getDocument();
+
+        assertNotNull(user);
+        assertEquals(userDocument, DOCUMENT);
     }
 
     @Test
@@ -50,7 +56,9 @@ class UserRepositoryTest {
         Long id = 1L;
         Optional<User> user = userRepository.findUserById(id);
 
-        assertThat(user).isNotEmpty();
-        assertThat(user.get().getId()).isEqualTo(id);
+        Long userId = user.get().getId();
+
+        assertNotNull(user);
+        assertEquals(userId, id);
     }
 }
