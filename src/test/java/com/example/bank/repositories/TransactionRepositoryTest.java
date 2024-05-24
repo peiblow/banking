@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
@@ -28,10 +31,13 @@ public class TransactionRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private Pageable pageable;
+
     private  static final String DOCUMENT = "12345678900";
 
     @BeforeAll
     public void setup() {
+        pageable = PageRequest.of(0, 5, Sort.by("timestamp"));
         BigDecimal balance = new BigDecimal(2000);
 
         User sent = createUser("Pablo", "Fernandez", DOCUMENT, "pablo@gmail.com", balance);
@@ -51,14 +57,11 @@ public class TransactionRepositoryTest {
 
     @Test
     void itShouldFindTransactionByReceiverId() {
-        Optional<List<Transaction>> transactions = transactionRepository.findTransactionByReceiverId(2L);
+        List<Transaction> transactions = transactionRepository.findTransactionByReceiverId(2L, pageable).getContent();
 
-        assertTrue(
-                transactions.isPresent() && !transactions.get().isEmpty(),
-                () -> "Transactions should be present and not empty"
-        );
+        assertFalse(transactions.isEmpty(), () -> "Transactions should be present and not empty");
 
-        Transaction transaction = transactions.get().get(0);
+        Transaction transaction = transactions.get(0);
         BigDecimal amountExpected = new BigDecimal("2000.00");
 
 
@@ -69,14 +72,11 @@ public class TransactionRepositoryTest {
 
     @Test
     void itShouldFindTransactionBySentId() {
-        Optional<List<Transaction>> transactions = transactionRepository.findByReceiverIdOrSentId(1L);
+        List<Transaction> transactions = transactionRepository.findByReceiverIdOrSentId(1L, pageable).getContent();
 
-        assertTrue(
-                transactions.isPresent() && !transactions.get().isEmpty(),
-                () -> "Transactions should be present and not empty"
-        );
+        assertFalse(transactions.isEmpty(), () -> "Transactions should be present and not empty");
 
-        Transaction transaction = transactions.get().get(0);
+        Transaction transaction = transactions.get(0);
         BigDecimal amountExpected = new BigDecimal("2000.00");
 
 

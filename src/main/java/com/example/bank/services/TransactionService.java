@@ -9,13 +9,16 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -35,19 +38,21 @@ public class TransactionService {
     @Autowired
     private NotificationService notificationService;
 
+    private final Pageable pageable = PageRequest.of(0, 5, Sort.by("timestamp").descending());
+
     @Cacheable("userTransaction")
-    public  List<Transaction> getUserTransactions(Long id) throws Exception {
-        return this.repository.findByReceiverIdOrSentId(id).orElseThrow(() -> new Exception("Nenhuma transação encontrada"));
+    public Page<Transaction> getUserTransactions(Long id) throws Exception {
+        return this.repository.findByReceiverIdOrSentId(id, pageable); // .orElseThrow(() -> new Exception("Nenhuma transação encontrada"));
     }
 
     @Cacheable("userTransaction")
-    public List<Transaction> getUserReceivedTransactions(Long id) throws Exception {
-        return this.repository.findTransactionByReceiverId(id).orElseThrow(() -> new Exception("Este usuário não recebeu nenhuma transação"));
+    public Page<Transaction> getUserReceivedTransactions(Long id) throws Exception {
+        return this.repository.findTransactionByReceiverId(id, pageable); // .orElseThrow(() -> new Exception("Este usuário não recebeu nenhuma transação"));
     }
 
     @Cacheable("userTransaction")
-    public List<Transaction> getUserSentTransactions(Long id) throws Exception {
-        return this.repository.findTransactionBySentId(id).orElseThrow(() -> new Exception("Este usuário não efetuou nenhuma transação"));
+    public Page<Transaction> getUserSentTransactions(Long id) throws Exception {
+        return this.repository.findTransactionBySentId(id, pageable); // .orElseThrow(() -> new Exception("Este usuário não efetuou nenhuma transação"));
     }
 
     public String circuitFallBack(Throwable throwable) {
@@ -99,8 +104,8 @@ public class TransactionService {
         log.info("INICIANDO GERAÇÃO DE REPORT");
 
         try {
-            List<Transaction> reportData = this.getUserTransactions(userId);
-            report.generate(reportData);
+            Page<Transaction> reportData = this.getUserTransactions(userId);
+            report.generate(reportData.getContent());
         } catch (Exception e) {
             log.error("NÃO FOI POSSIVEL GERAR O REPORT");
             throw new Exception("Não foi possivel gerar o report: " + e.getMessage());

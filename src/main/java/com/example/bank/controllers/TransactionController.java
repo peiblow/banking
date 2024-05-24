@@ -9,6 +9,7 @@ import com.example.bank.strategies.transactions.TransactionStrategy;
 import com.example.bank.utils.report.GenerateCsvReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,9 @@ public class TransactionController {
     private GenerateCsvReport generateCsvReport;
 
     @GetMapping
-    public ResponseEntity<List<Transaction>> getMyTransactions(@RequestParam(value = "id") Long id, @RequestParam(required = false, value = "type") TransactionType type) throws Exception {
+    public ResponseEntity<Page<Transaction>> getMyTransactions(@RequestParam(value = "id") Long id, @RequestParam(required = false, value = "type") TransactionType type) throws Exception {
         TransactionStrategy strategy = strategyFactory.getStrategy(type);
-        List<Transaction> myTransactions = strategy.getTransactions(id);
+        Page<Transaction> myTransactions = strategy.getTransactions(id);
 
         return new ResponseEntity<>(myTransactions, HttpStatus.OK);
     }

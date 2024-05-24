@@ -2,6 +2,7 @@ package com.example.bank.strategies.transactions;
 
 import com.example.bank.domain.transaction.Transaction;
 import com.example.bank.services.TransactionService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class ReceivedTransactionStrategy implements TransactionStrategy {
     }
 
     @Override
-    public List<Transaction> getTransactions(Long id) throws Exception {
+    public Page<Transaction> getTransactions(Long id) throws Exception {
         return transactionService.getUserReceivedTransactions(id);
     }
 }
