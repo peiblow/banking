@@ -1,6 +1,7 @@
 package com.example.bank.domain.transaction;
 
 import com.example.bank.domain.user.User;
+import com.example.bank.dtos.TransactionDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private BigDecimal amount;
 
     @ManyToOne
@@ -30,4 +32,10 @@ public class Transaction implements Serializable {
     private User receiver;
 
     private LocalDateTime timestamp;
+
+    public Transaction(TransactionDTO transactionDTO, User sent, User receiver) {
+        this.amount = transactionDTO.value();
+        this.sent = sent;
+        this.receiver = receiver;
+    }
 }

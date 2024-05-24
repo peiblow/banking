@@ -1,4 +1,3 @@
-http.host: "127.0.0.1"
-http.port: 9600
+pipeline.batch.client_inactivity_timeout: 600
 path.config: /var/lib/docker/volumes/logstash/pipeline
-xpack.monitoring.elasticsearch.hosts: ["localhost:9200"]
+pack.monitoring.elasticsearch.hosts: ["http://127.0.0.1:9200"]
