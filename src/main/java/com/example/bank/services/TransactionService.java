@@ -13,8 +13,6 @@ import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;

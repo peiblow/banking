@@ -5,6 +5,7 @@ import com.example.bank.domain.transaction.TransactionType;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.factory.TransactionStrategyFactory;
 import com.example.bank.services.TransactionService;
+import com.example.bank.strategies.transactions.TransactionStrategy;
 import com.example.bank.utils.report.GenerateCsvReport;
 import com.example.bank.strategies.transactions.TransactionStrategy;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,9 @@ import java.util.*;
 public class TransactionController {
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private TransactionStrategyFactory strategyFactory;
 
     @Autowired
     private GenerateCsvReport generateCsvReport;
