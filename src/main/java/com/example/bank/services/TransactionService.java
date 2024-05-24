@@ -4,14 +4,12 @@ import com.example.bank.domain.transaction.Transaction;
 import com.example.bank.domain.user.User;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.repositories.TransactionRepository;
+import com.example.bank.utils.report.GenerateReport;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCache;
-import com.example.bank.utils.report.GenerateReport;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

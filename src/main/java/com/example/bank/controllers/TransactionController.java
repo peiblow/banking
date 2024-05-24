@@ -7,9 +7,9 @@ import com.example.bank.factory.TransactionStrategyFactory;
 import com.example.bank.services.TransactionService;
 import com.example.bank.strategies.transactions.TransactionStrategy;
 import com.example.bank.utils.report.GenerateCsvReport;
+import com.example.bank.strategies.transactions.TransactionStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,9 @@ public class TransactionController {
 
     @Autowired
     private GenerateCsvReport generateCsvReport;
+    
+    @Autowired
+    private TransactionStrategyFactory strategyFactory;
 
     @GetMapping
     public ResponseEntity<List<Transaction>> getMyTransactions(@RequestParam(value = "id") Long id, @RequestParam(required = false, value = "type") TransactionType type) throws Exception {
