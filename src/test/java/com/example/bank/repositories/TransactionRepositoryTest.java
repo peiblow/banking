@@ -28,7 +28,7 @@ public class TransactionRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private  static final String DOCUMENT = "13647168602";
+    private  static final String DOCUMENT = "12345678900";
 
     @BeforeAll
     public void setup() {
