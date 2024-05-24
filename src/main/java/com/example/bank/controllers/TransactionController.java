@@ -6,6 +6,7 @@ import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.factory.TransactionStrategyFactory;
 import com.example.bank.services.TransactionService;
 import com.example.bank.strategies.transactions.TransactionStrategy;
+import com.example.bank.utils.report.GenerateCsvReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,9 @@ public class TransactionController {
     @Autowired
     private TransactionStrategyFactory strategyFactory;
 
+    @Autowired
+    private GenerateCsvReport generateCsvReport;
+
     @GetMapping
     public ResponseEntity<List<Transaction>> getMyTransactions(@RequestParam(value = "id") Long id, @RequestParam(required = false, value = "type") TransactionType type) throws Exception {
         TransactionStrategy strategy = strategyFactory.getStrategy(type);
@@ -39,5 +43,12 @@ public class TransactionController {
 
         log.info("Transaction has made with success!");
         return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity exportTransaction (@RequestParam(value = "id") Long id ) throws Exception {
+        transactionService.generateReport(id, generateCsvReport);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

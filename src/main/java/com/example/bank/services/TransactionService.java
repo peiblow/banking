@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCache;
+import com.example.bank.utils.report.GenerateReport;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -92,5 +95,17 @@ public class TransactionService {
 
 //        return authorizationResponse.getStatusCode() == HttpStatus.OK && message.equals("Autorizado");
         return true;
+    }
+
+    public void generateReport (Long userId, GenerateReport report) throws Exception {
+        log.info("INICIANDO GERAÇÃO DE REPORT");
+
+        try {
+            List<Transaction> reportData = this.getUserTransactions(userId);
+            report.generate(reportData);
+        } catch (Exception e) {
+            log.error("NÃO FOI POSSIVEL GERAR O REPORT");
+            throw new Exception("Não foi possivel gerar o report: " + e.getMessage());
+        }
     }
 }
