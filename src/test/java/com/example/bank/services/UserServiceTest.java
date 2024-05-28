@@ -54,13 +54,15 @@ public class UserServiceTest {
     @Test
     void itShouldCreateUser() {
         when(repository.save(user)).thenReturn(user);
-        when(passwordEncoder.encode((user.getPassword()))).thenReturn("#46@#SASD!6");
+        when(passwordEncoder.encode(user.getPassword())).thenReturn("#46@#SASD!6");
 
         User savedUser = service.createUser(userData);
         verify(repository).save(user);
+        verify(passwordEncoder).encode(user.getPassword());
 
         assertNotNull(savedUser);
-        assertEquals(user.getDocument(), savedUser.getDocument());
+        assertEquals(DOCUMENT, savedUser.getDocument());
+        assertEquals("#46@#SASD!6", savedUser.getPassword());
     }
 
     @Test

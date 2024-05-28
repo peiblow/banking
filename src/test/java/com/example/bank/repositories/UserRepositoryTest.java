@@ -4,6 +4,8 @@ import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
 import com.example.bank.integrationtests.AbstractIntegrationTest;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,28 +15,28 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class UserRepositoryTest extends AbstractIntegrationTest {
+class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private  static final String DOCUMENT = "12345678900";
+    private  static final String DOCUMENT = "123456789";
 
     @BeforeEach
     public void setup() {
         BigDecimal balance = new BigDecimal(2000);
         UserDTO userData = new UserDTO(
-                "Pablo",
-                "Fernandez",
+                "Test",
+                "Testador",
                 DOCUMENT,
-                "pablo22@gmail.com",
+                "test@gmail.com",
                 balance,
                 "123456789",
                 UserType.COMMON

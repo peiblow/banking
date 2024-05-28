@@ -22,3 +22,4 @@
 * Postgres
 * Redis (cache)
 * Ekl (logs)
+* Docker

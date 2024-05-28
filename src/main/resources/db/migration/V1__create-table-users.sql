@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
 	lastname varchar(150) not null,
 	document varchar(11) not null unique,
 	email varchar(150) not null unique,
-	password varchar(20) not null,
+	password varchar(150) not null,
 	balance decimal,
 	user_type varchar(100) not null
 );
