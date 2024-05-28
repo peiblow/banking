@@ -5,10 +5,12 @@ import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.dtos.UserDTO;
+import com.example.bank.integrationtests.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +24,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class TransactionRepositoryTest {
+public class TransactionRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private TransactionRepository transactionRepository;
 
