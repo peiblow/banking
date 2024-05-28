@@ -4,6 +4,7 @@ import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
 import com.example.bank.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
     @Autowired
     private UserRepository repository;
@@ -43,6 +45,7 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         this.saveUser(newUser);
 
+        log.info("User has been created! " + newUser.getDocument());
         return newUser;
     }
 

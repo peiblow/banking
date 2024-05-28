@@ -6,6 +6,8 @@ import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.dtos.UserDTO;
 import com.example.bank.integrationtests.AbstractIntegrationTest;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,9 +26,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TransactionRepositoryTest extends AbstractIntegrationTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+public class TransactionRepositoryTest {
     @Autowired
     private TransactionRepository transactionRepository;
 

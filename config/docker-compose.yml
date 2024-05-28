@@ -69,8 +69,8 @@ services:
     image: docker.elastic.co/logstash/logstash:8.12.0
     container_name: logstash_springboot
     volumes:
-      - ./logstash/config/logstash.yml:/var/lib/docker/volumes/logstash/config/logstash.yml
-      - ./logstash/pipeline:/var/lib/docker/volumes/logstash/pipeline/logstash.conf:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
       - "5044:5044"
       - "5000:5000"

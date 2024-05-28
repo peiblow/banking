@@ -1,3 +1,8 @@
-pipeline.batch.client_inactivity_timeout: 600
-path.config: /var/lib/docker/volumes/logstash/pipeline
-pack.monitoring.elasticsearch.hosts: ["http://127.0.0.1:9200"]
+http.host: "0.0.0.0"
+path.config: /usr/share/logstash/pipeline
+
+xpack:
+  monitoring:
+    enabled: true
+    elasticsearch:
+      hosts: ["http://elasticsearch:9200"]
