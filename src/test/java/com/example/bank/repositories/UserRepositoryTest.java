@@ -3,10 +3,12 @@ package com.example.bank.repositories;
 import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
+import com.example.bank.integrationtests.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -16,9 +18,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class UserRepositoryTest {
+class UserRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 

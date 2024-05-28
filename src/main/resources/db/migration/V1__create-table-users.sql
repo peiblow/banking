@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
 	email varchar(150) not null unique,
 	password varchar(20) not null,
 	balance decimal,
-	type varchar(100) not null
+	user_type varchar(100) not null
 );
 
 CREATE TABLE IF NOT EXISTS transactions (

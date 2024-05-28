@@ -8,6 +8,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity(name = "transactions")
 @Table(name = "transactions")
@@ -37,5 +38,6 @@ public class Transaction implements Serializable {
         this.amount = transactionDTO.value();
         this.sent = sent;
         this.receiver = receiver;
+        this.timestamp = LocalDateTime.now();
     }
 }
