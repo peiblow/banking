@@ -23,3 +23,4 @@
 * Redis (cache)
 * Ekl (logs)
 * Docker
+* localstack (s3, Sqs)
