@@ -1,6 +1,10 @@
 package com.example.bank.infra;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +18,7 @@ import com.amazonaws.regions.Regions;
 
 @Configuration
 public class AwsConfig {
-
-    public AWSCredentials credentials() {
+    private AWSCredentials credentials() {
         AWSCredentials credentials = new BasicAWSCredentials(
                 "test",
                 "test"
@@ -25,7 +28,7 @@ public class AwsConfig {
 
     @Bean
     public AmazonS3 amazonS3() {
-        AmazonS3 s3client = AmazonS3ClientBuilder
+        return AmazonS3ClientBuilder
                 .standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
                     "http://localhost:4566",
@@ -34,7 +37,12 @@ public class AwsConfig {
                 .withCredentials(new AWSStaticCredentialsProvider(credentials()))
                 .enablePathStyleAccess()
                 .build();
+    }
 
-        return s3client;
+    @Bean
+    public AmazonSQS amazonSQS() {
+        return AmazonSQSClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials()))
+                .build();
     }
 }

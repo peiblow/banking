@@ -5,6 +5,7 @@ import com.example.bank.domain.user.User;
 import com.example.bank.dtos.TransactionDTO;
 import com.example.bank.repositories.TransactionRepository;
 import com.example.bank.utils.aws.Bucket;
+import com.example.bank.utils.aws.SQS;
 import com.example.bank.utils.report.GenerateReport;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
@@ -91,8 +92,8 @@ public class TransactionService {
         this.userService.saveUser(sent);
         this.userService.saveUser(receiver);
 
-    // this.notificationService.sendNotification(sent, "Transação realizada com sucesso!");
-    // this.notificationService.sendNotification(receiver, "Você recebeu uma nova transação!");
+        this.notificationService.sendNotification(sent, "Transação realizada com sucesso!");
+        this.notificationService.sendNotification(receiver, "Você recebeu uma nova transação!");
 
         return newTransaction;
     }

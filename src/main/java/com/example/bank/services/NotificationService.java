@@ -3,6 +3,7 @@ package com.example.bank.services;
 import com.example.bank.domain.user.User;
 import com.example.bank.dtos.NotificationDTO;
 
+import com.example.bank.utils.aws.SQS;
 import lombok.extern.slf4j.Slf4j;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -18,16 +19,17 @@ import java.util.Map;
 @Slf4j
 public class NotificationService {
     @Autowired
-    private RestTemplate restTemplate;
+    private SQS sqs;
 
-    public void sendNotification (User user, String message) throws Exception{
-        String email = user.getEmail();
-        NotificationDTO notificationRequest = new NotificationDTO(email, message);
-        ResponseEntity<String> notificationResponse = restTemplate.postForEntity("https://run.mocky.io/v3/54dc2cf1-3add-45b5-b5a9-6bf7e7f1f4a6", notificationRequest, String.class);
-
-        if (!(notificationResponse.getStatusCode() == HttpStatus.OK)) {
-            log.error("Erro ao enviar notificação!");
-            throw new Exception("Serviço de notificação OFF!");
+    public void sendNotification (User user, String message) throws Exception {
+        try {
+            String email = user.getEmail();
+            String sqsMessage = "{\"from\": \"example@example.com\", \"to\": \"%s\", \"subject\": \"Uma nova transação foi efetuada!\", \"content\": \"%s\"}";
+            sqsMessage = String.format(sqsMessage, email, message);
+            sqs.sendMessage(sqsMessage);
+        } catch (Exception e) {
+            log.error("Erro ao enviar email: " + e.getMessage());
+            throw new Exception("Erro ao enviar email: " + e.getMessage());
         }
     }
 }

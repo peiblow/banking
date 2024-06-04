@@ -83,19 +83,29 @@ services:
       - elasticsearch
 
   localstack:
-    container_name: localstack-example
+    container_name: localstack-main
     image: localstack/localstack
     hostname: localstack
     ports:
       - "4566:4566"
       - "4510-4559:4510-4559"
     environment:
-      - LOCALSTACK_HOST=localhost:4566
-      - SERVICES=sns,sqs,s3,lambda
+      - SERVICES=sns,sqs,s3,lambda,ses,logs,kms,iam,cloudwatch,cloudformation
     volumes:
       - "../localstack:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+    networks:
+      - elastic
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - elastic
 
 networks:
   elastic:
