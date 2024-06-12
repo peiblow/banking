@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -22,6 +23,7 @@ public class WalletService {
 
     @Autowired
     private UserRepository userRepository;
+    private UserService userService;
 
     public Wallet findUserWallet (Long userId) throws RuntimeException {
         return this.repository.findByWalletOwnerId(userId)
@@ -59,7 +61,6 @@ public class WalletService {
             this.repository.save(newWallet);
 
             log.info("Nova carteira de moedas criada com sucesso! " + newWallet.getId());
-
             return newWallet;
         } catch (RuntimeException e) {
             log.error("error: " + e.getMessage());
