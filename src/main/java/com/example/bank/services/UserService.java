@@ -3,6 +3,7 @@ package com.example.bank.services;
 import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
+import com.example.bank.dtos.WalletDTO;
 import com.example.bank.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserService {
     private UserRepository repository;
 
     @Autowired
+    private WalletService walletService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     public void validateTransaction (User sender, BigDecimal amount) throws Exception {
@@ -32,21 +36,30 @@ public class UserService {
         }
     }
 
-    public User getUserById (Long id) throws Exception{
-        return this.repository.findUserById(id).orElseThrow(() -> new Exception("Usuário não encontrado"));
+    public User getUserById (Long id) throws RuntimeException {
+        return this.repository.findUserById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     public void saveUser (User user) {
         this.repository.save(user);
     }
 
-    public User createUser (UserDTO user) {
-        User newUser = new User(user);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        this.saveUser(newUser);
+    public User createUser (UserDTO user) throws RuntimeException {
+        try {
+            User newUser = new User(user);
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            this.saveUser(newUser);
 
-        log.info("User has been created! " + newUser.getDocument());
-        return newUser;
+            log.info("User has been created! " + newUser.getDocument());
+            log.info("User wallet creation has been started");
+            WalletDTO walletDTO = new WalletDTO(newUser.getId(), 0.0, 0.0, 0.0);
+            walletService.createWallet(walletDTO);
+
+            return newUser;
+        } catch (RuntimeException e) {
+            log.error("Erro ao criar usuario: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Cacheable("userList")
