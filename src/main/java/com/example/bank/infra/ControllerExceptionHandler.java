@@ -14,6 +14,7 @@ public class ControllerExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado", "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity threatNotFound(EntityNotFoundException exception) {
         return ResponseEntity.notFound().build();
