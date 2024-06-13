@@ -31,7 +31,7 @@ public class Wallet {
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Wallet(User owner, BigDecimal brl, BigDecimal usd, BigDecimal btc) {
         this.walletOwner = owner;
