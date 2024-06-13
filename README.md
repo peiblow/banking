@@ -27,7 +27,7 @@
 
 ## Tecnologias Usadas / Tech stack on this project:
 
-* Java 20
+* Java 17
 * Spring Boot 3
 * Postgres
 * Redis (cache)
