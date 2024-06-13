@@ -1,9 +1,14 @@
 package com.example.bank.services;
 
+import com.example.bank.domain.Wallet;
 import com.example.bank.domain.transaction.Transaction;
+import com.example.bank.domain.transaction.TransactionType;
 import com.example.bank.domain.user.User;
 import com.example.bank.dtos.TransactionDTO;
+import com.example.bank.factory.WalletCoinStrategyFactory;
 import com.example.bank.repositories.TransactionRepository;
+import com.example.bank.strategies.wallet.ReceiverCoinStrategy;
+import com.example.bank.strategies.wallet.SentCoinStrategy;
 import com.example.bank.utils.aws.Bucket;
 import com.example.bank.utils.aws.SQS;
 import com.example.bank.utils.report.GenerateReport;
@@ -31,6 +36,9 @@ public class TransactionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WalletService walletService;
 
     @Autowired
     private TransactionRepository repository;
@@ -68,10 +76,11 @@ public class TransactionService {
 
     @CircuitBreaker(name = "sendNotification", fallbackMethod = "circuitFallBack")
     public Transaction createTransaction(TransactionDTO transactionDTO) throws Exception {
-        User sent = this.userService.getUserById(transactionDTO.sentId());
-        User receiver = this.userService.getUserById(transactionDTO.receiverId());
+        Wallet sentWallet = this.walletService.findUserWallet(transactionDTO.sentId());
+        Wallet receiverWallet = this.walletService.findUserWallet(transactionDTO.receiverId());
 
-        userService.validateTransaction(sent, transactionDTO.value());
+        User sent = sentWallet.getWalletOwner();
+        User receiver = receiverWallet.getWalletOwner();
 
         boolean isAuthorized = authorizedTransaction(sent, transactionDTO.value());
         if (!isAuthorized) {
@@ -81,16 +90,22 @@ public class TransactionService {
 
         Transaction newTransaction = new Transaction();
         newTransaction.setAmount(transactionDTO.value());
+        newTransaction.setCoinType(transactionDTO.coinType());
         newTransaction.setSent(sent);
         newTransaction.setReceiver(receiver);
         newTransaction.setTimestamp(LocalDateTime.now());
 
-        sent.setBalance(sent.getBalance().subtract(transactionDTO.value()));
-        receiver.setBalance(receiver.getBalance().add(transactionDTO.value()));
+        WalletCoinStrategyFactory walletStrategy = new WalletCoinStrategyFactory(
+                new SentCoinStrategy(),
+                new ReceiverCoinStrategy()
+        );
+
+        sentWallet = walletStrategy.getStrategy(TransactionType.SENT).pay(transactionDTO.coinType(), sentWallet, transactionDTO.value());
+        receiverWallet = walletStrategy.getStrategy(TransactionType.RECEIVED).pay(transactionDTO.coinType(), receiverWallet, transactionDTO.value());
 
         this.repository.save(newTransaction);
-        this.userService.saveUser(sent);
-        this.userService.saveUser(receiver);
+        this.walletService.saveWallet(sentWallet);
+        this.walletService.saveWallet(receiverWallet);
 
         this.notificationService.sendNotification(sent, "Transação realizada com sucesso!");
         this.notificationService.sendNotification(receiver, "Você recebeu uma nova transação!");

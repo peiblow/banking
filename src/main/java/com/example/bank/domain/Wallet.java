@@ -4,6 +4,7 @@ import com.example.bank.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity(name = "wallets")
@@ -22,14 +23,14 @@ public class Wallet {
     @JoinColumn(name = "wallet_owner")
     private User walletOwner;
 
-    private Double brl;
-    private Double usd;
-    private Double btc;
+    private BigDecimal brl;
+    private BigDecimal usd;
+    private BigDecimal btc;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Wallet(User owner, Double brl, Double usd, Double btc) {
+    public Wallet(User owner, BigDecimal brl, BigDecimal usd, BigDecimal btc) {
         this.walletOwner = owner;
         this.brl = brl;
         this.usd = usd;

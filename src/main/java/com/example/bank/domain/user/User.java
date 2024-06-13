@@ -28,7 +28,6 @@ public class User implements Serializable {
     private String email;
 
     private String password;
-    private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
@@ -39,7 +38,6 @@ public class User implements Serializable {
         this.document = userData.document();
         this.email = userData.email();
         this.password = userData.password();
-        this.balance = userData.balance();
         this.userType = userData.type();
     }
 }
