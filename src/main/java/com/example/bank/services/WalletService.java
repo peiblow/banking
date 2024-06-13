@@ -20,7 +20,6 @@ public class WalletService {
 
     @Autowired
     private UserRepository userRepository;
-    private UserService userService;
 
     public Wallet findUserWallet (Long userId) throws RuntimeException {
         return this.repository.findByWalletOwnerId(userId)
