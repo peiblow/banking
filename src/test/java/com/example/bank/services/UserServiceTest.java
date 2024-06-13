@@ -1,8 +1,10 @@
 package com.example.bank.services;
 
+import com.example.bank.domain.Wallet;
 import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
 import com.example.bank.dtos.UserDTO;
+import com.example.bank.dtos.WalletDTO;
 import com.example.bank.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,9 @@ public class UserServiceTest {
     private UserRepository repository;
 
     @Mock
+    private WalletService walletService;
+
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
@@ -43,7 +48,6 @@ public class UserServiceTest {
                 "Fernandez",
                 DOCUMENT,
                 "pablo@gmail.com",
-                balance,
                 "123456789",
                 UserType.COMMON
         );
@@ -55,6 +59,8 @@ public class UserServiceTest {
     void itShouldCreateUser() {
         when(repository.save(user)).thenReturn(user);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("#46@#SASD!6");
+        when(walletService.createWallet(any(WalletDTO.class)))
+                .thenReturn(new Wallet(user, BigDecimal.valueOf(0), BigDecimal.valueOf(0), BigDecimal.valueOf(0)));
 
         User savedUser = service.createUser(userData);
         verify(repository).save(user);

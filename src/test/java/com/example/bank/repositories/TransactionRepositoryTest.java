@@ -1,5 +1,6 @@
 package com.example.bank.repositories;
 
+import com.example.bank.domain.transaction.CoinType;
 import com.example.bank.domain.transaction.Transaction;
 import com.example.bank.domain.user.User;
 import com.example.bank.domain.user.UserType;
@@ -44,17 +45,17 @@ public class TransactionRepositoryTest {
         pageable = PageRequest.of(0, 5, Sort.by("timestamp"));
         BigDecimal balance = new BigDecimal(2000);
 
-        User sent = createUser("Pablo", "Fernandez", DOCUMENT, "pablo@gmail.com", balance);
-        User receiver = createUser("Peiblow", "Santos", "15985286289", "peiblow@gmail.com", balance);
+        User sent = createUser("Pablo", "Fernandez", DOCUMENT, "pablo@gmail.com");
+        User receiver = createUser("Peiblow", "Santos", "15985286289", "peiblow@gmail.com");
 
-        TransactionDTO transactionData = new TransactionDTO(balance, 1L, 2L);
+        TransactionDTO transactionData = new TransactionDTO(balance, 1L, 2L, CoinType.BRL);
         Transaction transaction = new Transaction(transactionData, sent, receiver);
 
         transactionRepository.save(transaction);
     }
 
-    private User createUser(String firstName, String lastName, String document, String email, BigDecimal balance) {
-        UserDTO userDTO = new UserDTO(firstName, lastName, document, email, balance, "test@123456", UserType.COMMON);
+    private User createUser(String firstName, String lastName, String document, String email) {
+        UserDTO userDTO = new UserDTO(firstName, lastName, document, email, "test@123456", UserType.COMMON);
         User user = new User(userDTO);
         return userRepository.save(user);
     }

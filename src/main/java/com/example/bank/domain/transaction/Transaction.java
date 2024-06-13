@@ -24,6 +24,7 @@ public class Transaction implements Serializable {
 
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
     private CoinType coinType;
 
     @ManyToOne
