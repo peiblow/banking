@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -61,6 +62,7 @@ public class WalletService {
             this.repository.save(newWallet);
 
             log.info("Nova carteira de moedas criada com sucesso! " + newWallet.getId());
+
             return newWallet;
         } catch (RuntimeException e) {
             log.error("error: " + e.getMessage());
