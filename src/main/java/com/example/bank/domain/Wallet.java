@@ -27,7 +27,10 @@ public class Wallet {
     private BigDecimal usd;
     private BigDecimal btc;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Wallet(User owner, BigDecimal brl, BigDecimal usd, BigDecimal btc) {
@@ -35,5 +38,7 @@ public class Wallet {
         this.brl = brl;
         this.usd = usd;
         this.btc = btc;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

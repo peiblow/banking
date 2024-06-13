@@ -52,7 +52,6 @@ public class UserControllerTest {
                 "Fernandez",
                 DOCUMENT,
                 "pablo@gmail.com",
-                balance,
                 "123456789",
                 UserType.COMMON
         );

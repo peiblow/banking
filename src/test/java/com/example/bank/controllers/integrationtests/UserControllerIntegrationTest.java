@@ -55,7 +55,6 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
                 "test",
                 DOCUMENT,
                 "p@gmail.com",
-                balance,
                 "123456",
                 UserType.COMMON
         );

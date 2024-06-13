@@ -37,7 +37,6 @@ class UserRepositoryTest {
                 "Testador",
                 DOCUMENT,
                 "test@gmail.com",
-                balance,
                 "123456789",
                 UserType.COMMON
         );

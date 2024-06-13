@@ -51,14 +51,7 @@ public class WalletService {
         try {
             User owner = this.userRepository.findUserById(walletDTO.userId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-            Wallet newWallet = new Wallet();
-            newWallet.setWalletOwner(owner);
-            newWallet.setBrl(BigDecimal.valueOf(1000));
-            newWallet.setUsd(BigDecimal.valueOf(1000));
-            newWallet.setBtc(BigDecimal.valueOf(1000));
-            newWallet.setCreatedAt(LocalDateTime.now());
-            newWallet.setUpdatedAt(LocalDateTime.now());
-
+            Wallet newWallet = new Wallet(owner, walletDTO.brl(), walletDTO.usd(), walletDTO.btc());
             this.repository.save(newWallet);
 
             log.info("Nova carteira de moedas criada com sucesso! " + newWallet.getId());
