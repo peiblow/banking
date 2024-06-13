@@ -24,6 +24,8 @@ public class Transaction implements Serializable {
 
     private BigDecimal amount;
 
+    private CoinType coinType;
+
     @ManyToOne
     @JoinColumn(name = "sent_id")
     private User sent;
@@ -36,6 +38,7 @@ public class Transaction implements Serializable {
 
     public Transaction(TransactionDTO transactionDTO, User sent, User receiver) {
         this.amount = transactionDTO.value();
+        this.coinType = transactionDTO.coinType();
         this.sent = sent;
         this.receiver = receiver;
         this.timestamp = LocalDateTime.now();

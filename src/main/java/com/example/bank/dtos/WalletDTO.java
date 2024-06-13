@@ -1,4 +1,6 @@
 package com.example.bank.dtos;
 
-public record WalletDTO(Long userId, Double brl, Double usd, Double btc) {
+import java.math.BigDecimal;
+
+public record WalletDTO(Long userId, BigDecimal brl, BigDecimal usd, BigDecimal btc) {
 }

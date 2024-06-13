@@ -26,12 +26,12 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public void validateTransaction (User sender, BigDecimal amount) throws Exception {
+    public void validateTransaction (User sender, BigDecimal amount, BigDecimal walletCoinBalance) throws Exception {
         if (sender.getUserType() == UserType.MERCHANT) {
             throw new Exception("Usuário do tipo LOJISTA não está autorizado a realizar transações");
         }
 
-        if (sender.getBalance().compareTo(amount) < 0) {
+        if (walletCoinBalance.compareTo(amount) < 0) {
             throw new Exception("Saldo insuficiente");
         }
     }
@@ -50,9 +50,9 @@ public class UserService {
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             this.saveUser(newUser);
 
-            log.info("User has been created! " + newUser.getDocument());
+            log.info("User has been created! {}", newUser.getDocument());
             log.info("User wallet creation has been started");
-            WalletDTO walletDTO = new WalletDTO(newUser.getId(), 0.0, 0.0, 0.0);
+            WalletDTO walletDTO = new WalletDTO(newUser.getId(), BigDecimal.valueOf(0), BigDecimal.valueOf(0), BigDecimal.valueOf(0));
             walletService.createWallet(walletDTO);
 
             return newUser;

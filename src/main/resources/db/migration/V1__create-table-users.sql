@@ -5,12 +5,12 @@ CREATE TABLE IF NOT EXISTS users (
 	document varchar(11) not null unique,
 	email varchar(150) not null unique,
 	password varchar(150) not null,
-	balance decimal,
 	user_type varchar(100) not null
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
 	id serial not null primary key,
+	coin_type varchar(10) not null,
 	amount decimal not null,
 	receiver_id int not null,
 	sent_id int not null,
